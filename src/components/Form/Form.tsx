@@ -1,53 +1,58 @@
-import {Button, Label, RadioGroup, RadioGroupItem, Textarea} from 
-    "@/utils/FormElements/FormElements";
+//UTILS
+import {Button} from "@/utils/FormElements/FormElements";
+//Context
+import { useFormContext } from "react-hook-form"
+//Custom Hook
+import { useCategorySelected } from "@/hooks/CategorySelected/useCategorySelected.tsx";
+//Components import
+import {RadioButtonsSelector} from "@/components/Form/RadioButtonsSelector/RadioButtonsSelector.tsx";
+import {CategorySelectedType} from "@/components/Category/CategorySelectedType.tsx"
 
 const FormView = () => 
 {
-    //const addProduct = useStore(state => state.addProduct);
+    const {categorySelected, setCategorySelected} = useCategorySelected();
+    const {handleSubmit, reset, formState: {isValid, errors}} = useFormContext();
+    const errorsAmount = Object.keys(errors).length;
 
+    const onSubmit = (data: object) => {
+        console.log(data);
+        if(isValid)
+        {
+            //1) Add product
+            //2) Delete form state
+                reset();   
+        }
+    };
+  
     return (
         <>
-            <form onSubmit={(e) => e.preventDefault()} className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
+            <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Añadir producto</h2>
 
                 <div className="mb-6">
-                    <h3 className="font-medium text-sm">Categoria</h3>
-                        <RadioGroup defaultValue="clothes" name="category">
-                            <div className="flex items-center space-x-2 mt-2">
-                                <RadioGroupItem value="clothes" id="clothes" />
-                                <Label htmlFor="clothes">Ropa</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="food" id="food"/>
-                                <Label htmlFor="food">Alimentos</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="tecnology" id="tecnology"/>
-                                <Label htmlFor="tecnology">Tecnologia</Label>
-                            </div>
-                        </RadioGroup>
+                    <h3 className="font-medium text-sm mb-2">Categoría</h3>
+                        <RadioButtonsSelector
+                            items={["Ropa", "Alimentos", "Tecnología"]} 
+                            setCategorySelected={setCategorySelected} 
+                            name={"category"}/>
+                </div>
+                <div className="mb-6">
+                    {categorySelected!==undefined && 
+                        <>
+                            <h3 className="font-medium text-sm mb-2">Tipo de {categorySelected}</h3>
+                            <CategorySelectedType categorySelected={categorySelected} />
+                        </>
+                    }
                 </div>
 
-                <div className="mb-6">
-                    <h3 className="font-medium text-sm">Cantidad</h3>
-                        <RadioGroup defaultValue="1">
-                            <div className="flex items-center justify-between w-[298px] space-x-2 mt-2 tablet:w-full">
-                                <RadioGroupItem value="1" id="one-item" />
-                                <Label htmlFor="one-item">1</Label>
-                                <RadioGroupItem value="2" id="two-items" />
-                                <Label htmlFor="two-items">2</Label>
-                                <RadioGroupItem value="3" id="three-items"/>
-                                <Label htmlFor="three-items">3</Label>
-                                <RadioGroupItem value="4" id="four-items"/>
-                                <Label htmlFor="four-items">4</Label>
-                            </div>
-                        </RadioGroup>
+                <div className="mb-2">
+                    <h3 className="font-medium text-sm mb-2">Cantidad</h3>
+                        <RadioButtonsSelector
+                            items={["1", "2", "3", "4"]} 
+                            name={"quantity"}/>
                 </div>
-            
-                <div className="mb-8">
-                    <Label htmlFor="message">Descripción</Label>
-                    <Textarea id="message" placeholder="Your message here..." required className="mt-2"/>
-                </div>
+                {errorsAmount > 0 && <p className="text-center text-red-500 text-sm mb-4">🔥 Todos los campos són obligatorios</p>}
+
                 <Button type="submit" className="w-full">Enviar</Button>
             </form>
         </>       
