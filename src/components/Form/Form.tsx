@@ -1,26 +1,35 @@
 //UTILS
 import {Button} from "@/utils/FormElements/FormElements";
 //Context
-import { useFormContext } from "react-hook-form"
+import { useFormContext} from "react-hook-form"
 //Custom Hook
 import { useCategorySelected } from "@/hooks/CategorySelected/useCategorySelected.tsx";
 //Components import
 import {RadioButtonsSelector} from "@/components/Form/RadioButtonsSelector/RadioButtonsSelector.tsx";
 import {CategorySelectedType} from "@/components/Category/CategorySelectedType.tsx"
+//Import Store
+import useStore from "@/store/useStore.tsx";
+import {Product} from "@/store/types/storeTypes.tsx";
+
 
 const FormView = () => 
 {
     const {categorySelected, setCategorySelected} = useCategorySelected();
     const {handleSubmit, reset, formState: {isValid, errors}} = useFormContext();
     const errorsAmount = Object.keys(errors).length;
+    const addProduct = useStore(state => state.addProduct);
 
     const onSubmit = (data: object) => {
-        console.log(data);
+        
         if(isValid)
         {
+            const formData = data as Product;
+            //Convert string quantity to number
+            formData.quantity = Number(formData.quantity);
             //1) Add product
+            addProduct(formData);
             //2) Delete form state
-                reset();   
+            reset();   
         }
     };
   

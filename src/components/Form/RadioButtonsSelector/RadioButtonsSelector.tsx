@@ -14,7 +14,9 @@ type Selector = {
 export const RadioButtonsSelector = (props: Selector) => 
 {
     const {items, setCategorySelected, name} = props;
-    const handleCategoryClick = name === "category" ? { onClick: (e) => getCategorySelected(e, setCategorySelected) } : {};
+    // Handle click event for category selection", 
+    // If provided, will be called with selected category value when user clicks on a category option.
+    const handleCategoryClick = name === "category" ? { onClick: (e: React.MouseEvent<HTMLInputElement>) => getCategorySelected(e, setCategorySelected ?? (() => {})) } : {};
     const {register} = useFormContext();
 
     return (    
