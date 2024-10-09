@@ -5,8 +5,11 @@ export type Product = {
 }
 export type Store = {
     products: Product[],
+    updateProduct: (product: Product, index: number) => void,
+    getProductByIndex: (by: number) => Product,
     addProduct: (by: Product) => void,
-    deleteProduct: (by: object) => void,
-    editProduct: (by: object) => void,
+    increaseQuantity: (by: number) => void,
+    decreaseQuantity: (by: number) => void,
+    deleteProduct: (by: number) => void,
     deleteStore: () => void,
 }
