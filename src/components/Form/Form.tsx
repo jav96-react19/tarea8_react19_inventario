@@ -23,6 +23,7 @@ const FormView = () =>
         
         if(isValid)
         {
+            //Convert form data to Product type
             const formData = data as Product;
             //Convert string quantity to number
             formData.quantity = Number(formData.quantity);
@@ -32,7 +33,7 @@ const FormView = () =>
             reset();   
         }
     };
-  
+
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
@@ -46,7 +47,7 @@ const FormView = () =>
                             name={"category"}/>
                 </div>
                 <div className="mb-6">
-                    {categorySelected!==undefined && 
+                    {categorySelected!=="" && 
                         <>
                             <h3 className="font-medium text-sm mb-2">Tipo de {categorySelected}</h3>
                             <CategorySelectedType categorySelected={categorySelected} />
